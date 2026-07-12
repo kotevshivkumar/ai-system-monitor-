@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Monitoring Dashboard</title>
+
+    <style>
+        body{
+            background:#121212;
+            color:white;
+            font-family:Arial;
+            padding:30px;
+        }
+
+        h1{
+            text-align:center;
+        }
+
+        .card{
+            background:#1f1f1f;
+            padding:20px;
+            margin:20px;
+            border-radius:12px;
+            width:350px;
+        }
+
+        .online{
+            color:lime;
+            font-weight:bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<h1>🖥 AI Monitoring Dashboard</h1>
+
+{% for hostname,data in devices.items() %}
+
+<div class="card">
+
+<h2>{{hostname}}</h2>
+
+<p><b>Operating System:</b> {{data.operating_system}}</p>
+
+<p><b>CPU Usage:</b> {{data.cpu_usage}} %</p>
+
+<p><b>RAM Usage:</b> {{data.ram_usage}} %</p>
+
+<p><b>Disk Usage:</b> {{data.disk_usage}} %</p>
+
+<p class="online">🟢 ONLINE</p>
+
+</div>
+
+{% endfor %}
+
+</body>
+
+</html>
