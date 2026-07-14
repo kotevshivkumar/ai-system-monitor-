@@ -25,9 +25,17 @@
         .card{
             background:#1f1f1f;
             padding:20px;
-            width:350px;
+            width:420px;
             border-radius:12px;
-            box-shadow:0 0 10px rgba(255,255,255,0.1);
+            box-shadow:0 0 10px rgba(255,255,255,0.15);
+        }
+
+        h2{
+            color:#00d4ff;
+        }
+
+        p{
+            margin:6px 0;
         }
 
         .online{
@@ -35,8 +43,9 @@
             font-weight:bold;
         }
 
-        h2{
-            color:#00d4ff;
+        hr{
+            border:1px solid #333;
+            margin:12px 0;
         }
     </style>
 
@@ -54,15 +63,53 @@
 
 <h2>{{ hostname }}</h2>
 
-<p><b>Operating System:</b> {{ data.operating_system }}</p>
-
-<p><b>CPU Usage:</b> {{ data.cpu_usage }} %</p>
-
-<p><b>RAM Usage:</b> {{ data.ram_usage }} %</p>
-
-<p><b>Disk Usage:</b> {{ data.disk_usage }} %</p>
-
 <p class="online">🟢 ONLINE</p>
+
+<hr>
+
+<p><b>👤 Username:</b> {{ data.username }}</p>
+
+<p><b>🖥 Operating System:</b> {{ data.operating_system }}</p>
+
+<p><b>🌐 IP Address:</b> {{ data.ip_address }}</p>
+
+<hr>
+
+<p><b>⚙ CPU Model:</b> {{ data.cpu_model }}</p>
+
+<p><b>🔥 CPU Usage:</b> {{ data.cpu_usage }} %</p>
+
+<p><b>🧠 CPU Cores:</b> {{ data.cpu_cores }}</p>
+
+<p><b>⚡ CPU Frequency:</b> {{ data.cpu_frequency }}</p>
+
+<hr>
+
+<p><b>💾 RAM Usage:</b> {{ data.ram_usage }} %</p>
+
+<p><b>📦 Total RAM:</b> {{ data.total_ram_gb }} GB</p>
+
+<p><b>📂 Available RAM:</b> {{ data.available_ram_gb }} GB</p>
+
+<hr>
+
+<p><b>💽 Disk Usage:</b> {{ data.disk_usage }} %</p>
+
+<p><b>💽 Total Disk:</b> {{ data.disk_total_gb }} GB</p>
+
+<p><b>📂 Free Disk:</b> {{ data.disk_free_gb }} GB</p>
+
+<hr>
+
+<p><b>🔋 Battery:</b> {{ data.battery_percent }}</p>
+
+<p><b>🔌 Charging:</b> {{ data.charging }}</p>
+
+<hr>
+
+<p><b>⏱ Uptime:</b> {{ data.uptime_hours }} Hours</p>
+
+<p><b>⚙ Running Processes:</b> {{ data.running_processes }}</p>
 
 </div>
 
