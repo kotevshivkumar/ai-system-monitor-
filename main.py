@@ -16,10 +16,16 @@ def home(request: Request):
 
     current_time = time.time()
 
-    # Check whether each device is online
     for hostname, data in devices.items():
 
-        if current_time - data["last_seen"] <= 15:
+        seconds = current_time - data["last_seen"]
+
+        print("Hostname:", hostname)
+        print("Current Time:", current_time)
+        print("Last Seen:", data["last_seen"])
+        print("Difference:", seconds)
+
+        if seconds <= 15:
             data["status"] = "ONLINE"
         else:
             data["status"] = "OFFLINE"
@@ -32,7 +38,6 @@ def home(request: Request):
             "devices": devices
         }
     )
-
 # Receive data from client PCs
 @app.post("/system")
 def receive_data(data: dict):
