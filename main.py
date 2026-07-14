@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 import time
+from database import conn, cursor
 
 app = FastAPI()
 
@@ -47,6 +48,23 @@ def receive_data(data: dict):
     # Save the last time this PC contacted the server
     data["last_seen"] = time.time()
 
+    cursor.execute("""
+    INSERT OR REPLACE INTO devices
+    (hostname, username, operating_system, ip_address,
+     cpu_usage, ram_usage, disk_usage, last_seen)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        data["hostname"],
+        data["username"],
+        data["operating_system"],
+        data["ip_address"],
+        data["cpu_usage"],
+        data["ram_usage"],
+        data["disk_usage"],
+        data["last_seen"]
+    ))
+
+    conn.commit()
     devices[hostname] = data
 
     return {"status": "received"}
