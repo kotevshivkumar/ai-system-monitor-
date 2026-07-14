@@ -4,23 +4,25 @@ import time
 
 app = FastAPI()
 
+# Templates folder
 templates = Jinja2Templates(directory="templates")
 
 # Store connected devices
 devices = {}
 
 # Dashboard
-
 @app.get("/")
 def home(request: Request):
 
     current_time = time.time()
 
-    for hostname in devices:
-        if current_time - devices[hostname]["last_seen"] < 15:
-            devices[hostname]["status"] = "ONLINE"
+    # Check whether each device is online
+    for hostname, data in devices.items():
+
+        if current_time - data["last_seen"] <= 15:
+            data["status"] = "ONLINE"
         else:
-            devices[hostname]["status"] = "OFFLINE"
+            data["status"] = "OFFLINE"
 
     return templates.TemplateResponse(
         request=request,
@@ -30,23 +32,16 @@ def home(request: Request):
             "devices": devices
         }
     )
+
 # Receive data from client PCs
 @app.post("/system")
 def receive_data(data: dict):
+
     hostname = data["hostname"]
 
-    # Save the time when data was received
+    # Save the last time this PC contacted the server
     data["last_seen"] = time.time()
 
     devices[hostname] = data
 
-    return {"status": "received"}@app.get("/")
-def home(request: Request):
-
-    for hostname, data in devices.items():
-
-        seconds = (time.now() - data["last_seen"]).total_seconds()
-
-        if seconds <= 15:
-            data["status"] = "ONLINE"
     return {"status": "received"}
