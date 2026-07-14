@@ -29,7 +29,7 @@ def home(request: Request):
             data["status"] = "ONLINE"
         else:
             data["status"] = "OFFLINE"
-
+            print(devices)
     return templates.TemplateResponse(
         request=request,
         name="dashboard.html",
