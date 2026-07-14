@@ -45,7 +45,7 @@ def home(request: Request):
 
     for hostname, data in devices.items():
 
-        seconds = (datetime.now() - data["last_seen"]).total_seconds()
+        seconds = (time.now() - data["last_seen"]).total_seconds()
 
         if seconds <= 15:
             data["status"] = "ONLINE"
