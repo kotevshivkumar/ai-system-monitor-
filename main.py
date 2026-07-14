@@ -1,42 +1,40 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
+import psutil
+
 app = FastAPI()
+
+# Templates folder
 templates = Jinja2Templates(directory="templates")
+
+# Store connected devices
 devices = {}
 
-class SystemData(BaseModel):
-    hostname: str
-    operating_system: str
-    cpu_usage: float
-    ram_usage: float
-    disk_usage: float
-
+# Dashboard
 @app.get("/")
-def home():
-    return {"message": "AI Monitoring Server is Running"}
-
-@app.post("/system")
-def receive_data(data: SystemData):
-
-    devices[data.hostname] = data.dict()
-
-    print("\n====== DATA RECEIVED ======")
-    print(data)
-
-    return {"status": "received"}
-
-@app.get("/devices")
-def get_devices():
-    return devices
-
-@app.get("/dashboard", response_class=HTMLResponse)
-def dashboard(request: Request):
+def home(request: Request):
     return templates.TemplateResponse(
-        "dashboard.html",
-        {
-            "request": request,
-            "devices": devices
+        request=request,
+        name="dashboard.html",
+        context={
+            "cpu": psutil.cpu_percent(interval=1),
+            "ram": psutil.virtual_memory().percent,
+            "disk": psutil.disk_usage("/").percent
         }
     )
+
+# Live metrics API
+@app.get("/metrics")
+def metrics():
+    return {
+        "cpu": psutil.cpu_percent(interval=1),
+        "ram": psutil.virtual_memory().percent,
+        "disk": psutil.disk_usage("/").percent
+    }
+
+# Receive data from client PCs
+@app.post("/system")
+def receive_data(data: dict):
+    hostname = data["hostname"]
+    devices[hostname] = data
+    return {"status": "received"}
