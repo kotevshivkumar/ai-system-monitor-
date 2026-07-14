@@ -15,17 +15,28 @@
             text-align:center;
         }
 
+        .container{
+            display:flex;
+            flex-wrap:wrap;
+            gap:20px;
+            justify-content:center;
+        }
+
         .card{
             background:#1f1f1f;
             padding:20px;
-            margin:auto;
             width:350px;
             border-radius:12px;
+            box-shadow:0 0 10px rgba(255,255,255,0.1);
         }
 
         .online{
             color:lime;
             font-weight:bold;
+        }
+
+        h2{
+            color:#00d4ff;
         }
     </style>
 
@@ -35,33 +46,29 @@
 
 <h1>🖥 AI Monitoring Dashboard</h1>
 
+<div class="container">
+
+{% for hostname, data in devices.items() %}
+
 <div class="card">
 
-<h2>My Computer</h2>
+<h2>{{ hostname }}</h2>
 
-<p><b>CPU Usage:</b> <span id="cpu">{{ cpu }} %</span></p>
+<p><b>Operating System:</b> {{ data.operating_system }}</p>
 
-<p><b>RAM Usage:</b> <span id="ram">{{ ram }} %</span></p>
+<p><b>CPU Usage:</b> {{ data.cpu_usage }} %</p>
 
-<p><b>Disk Usage:</b> <span id="disk">{{ disk }} %</span></p>
+<p><b>RAM Usage:</b> {{ data.ram_usage }} %</p>
+
+<p><b>Disk Usage:</b> {{ data.disk_usage }} %</p>
 
 <p class="online">🟢 ONLINE</p>
 
 </div>
 
-<script>
-async function updateMetrics() {
-    const response = await fetch("/metrics");
-    const data = await response.json();
+{% endfor %}
 
-    document.getElementById("cpu").innerText = data.cpu + " %";
-    document.getElementById("ram").innerText = data.ram + " %";
-    document.getElementById("disk").innerText = data.disk + " %";
-}
-
-updateMetrics();
-setInterval(updateMetrics, 2000);
-</script>
+</div>
 
 </body>
 </html>

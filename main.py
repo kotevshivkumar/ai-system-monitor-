@@ -24,13 +24,16 @@ def home(request: Request):
     )
 
 # Live metrics API
-@app.get("/metrics")
-def metrics():
-    return {
-        "cpu": psutil.cpu_percent(interval=1),
-        "ram": psutil.virtual_memory().percent,
-        "disk": psutil.disk_usage("/").percent
-    }
+@app.get("/")
+def home(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="dashboard.html",
+        context={
+            "request": request,
+            "devices": devices
+        }
+    )
 
 # Receive data from client PCs
 @app.post("/system")
